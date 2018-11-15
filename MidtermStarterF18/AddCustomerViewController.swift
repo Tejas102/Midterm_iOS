@@ -36,7 +36,7 @@ class AddCustomerViewController: UIViewController {
         // HINT HINT HINT HINT HINT
         // HINT HINT HINT HINT HINT
         // Code to create a random 4 digit string
-        var x:String = ""
+        var x:String = "0..<9992"
         repeat {
             // Create a string with a random number 0...9991
             x = String(format:"%04d", arc4random_uniform(9992) )

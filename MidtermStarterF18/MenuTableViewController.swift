@@ -10,6 +10,11 @@ import UIKit
 
 class MenuTableViewController: UITableViewController {
 
+    
+    @IBAction func addcustbutton(_ sender: Any) {
+        performSegue(withIdentifier: "tabletoadd", sender: self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

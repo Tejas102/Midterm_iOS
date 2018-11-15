@@ -71,18 +71,31 @@ class DepositViewController: UIViewController {
     
     
     @IBAction func showCustomersPressed(_ sender: Any) {
-        print("Show customers button pressed!")
+        print("Show all users pressed!")
         
+        // This is the same as:  SELECT * FROM User
+        
+        //SELECT * FROM User
         let fetchRequest:NSFetchRequest<Customers> = Customers.fetchRequest()
         
+        //WHERE email="jenelle@gmail.com"
+        //fetchRequest.predicate =  NSPredicate(format: "email == %@", "jenelle@gmail.com")
+        
+        // SQL: SELECT * FROM User WHERE email="jeenlle@gmil.com"
+        
         do {
-            let results = try fetchRequest.execute() as [Customers]
+            // Send the "SELECT *" to the database
+            //  results = variable that stores any "rows" that come back from the db
+            // Note: The database will send back an array of User objects
+            // (this is why I explicilty cast results as [User]
+            let results = try self.context.fetch(fetchRequest) as [Customers]
             
+            // Loop through the database results and output each "row" to the screen
             print("Number of items in database: \(results.count)")
             
-            for c in results {
-                print("Person Email: \(c.name)")
-                print("Person Password: \(c.balance)")
+            for x in results {
+                print("User Email: \(x.name)")
+                print("User Password: \(x.balance)")
             }
         }
         catch {

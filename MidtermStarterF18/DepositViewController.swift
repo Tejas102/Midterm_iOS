@@ -31,6 +31,10 @@ class DepositViewController: UIViewController {
         super.viewDidLoad()
 
         print("You are on the Check Balance screen!")
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        self.context = appDelegate.persistentContainer.viewContext
+
     }
 
     override func didReceiveMemoryWarning() {

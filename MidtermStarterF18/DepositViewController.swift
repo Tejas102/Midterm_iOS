@@ -7,9 +7,12 @@
 //
 
 import UIKit
+import CoreData
 
 class DepositViewController: UIViewController {
 
+    var context:NSManagedObjectContext!
+    
     // MARK: Outlets
     // ---------------------
     @IBOutlet weak var customerIdTextBox: UITextField!
@@ -17,6 +20,11 @@ class DepositViewController: UIViewController {
 
     @IBOutlet weak var depositAmountTextBox: UITextField!
     @IBOutlet weak var messagesLabel: UILabel!
+    
+    @IBAction func backtocustbutton(_ sender: Any) {
+        performSegue(withIdentifier: "checktoadd", sender: self)
+    }
+    
     
     // MARK: Default Functions
     // ---------------------
@@ -38,6 +46,27 @@ class DepositViewController: UIViewController {
     
     @IBAction func checkBalancePressed(_ sender: Any) {
         print("check balance button pressed!")
+        // This is the same as:  SELECT * FROM User
+        let fetchRequest:NSFetchRequest<Customers> = Customers.fetchRequest()
+        
+        do {
+            // Send the "SELECT *" to the database
+            //  results = variable that stores any "rows" that come back from the db
+            // Note: The database will send back an array of User objects
+            // (this is why I explicilty cast results as [User]
+            let results = try fetchRequest.execute() as [Customers]
+            
+            // Loop through the database results and output each "row" to the screen
+            print("Number of items in database: \(results.count)")
+            
+            for c in results {
+                print("Person Email: \(c.name)")
+                print("Person Password: \(c.balance)")
+            }
+        }
+        catch {
+            print("Error when fetching from database")
+        }
     }
     
     

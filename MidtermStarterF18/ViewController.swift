@@ -10,6 +10,9 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    @IBAction func loginbutton(_ sender: Any) {
+        performSegue(withIdentifier: "s1to2", sender: self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

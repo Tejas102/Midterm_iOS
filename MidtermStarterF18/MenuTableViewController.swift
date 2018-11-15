@@ -10,6 +10,7 @@ import UIKit
 
 class MenuTableViewController: UITableViewController {
 
+    var options = ["Add Customer", "Make Deposit"]
     
     @IBAction func addcustbutton(_ sender: Any) {
         performSegue(withIdentifier: "tabletoadd", sender: self)
@@ -39,7 +40,7 @@ class MenuTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return options.count
     }
 
     /*

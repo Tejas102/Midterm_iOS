@@ -25,7 +25,6 @@ class DepositViewController: UIViewController {
         performSegue(withIdentifier: "checktoadd", sender: self)
     }
     
-    
     // MARK: Default Functions
     // ---------------------
     override func viewDidLoad() {
@@ -38,15 +37,27 @@ class DepositViewController: UIViewController {
         super.didReceiveMemoryWarning()
         
     }
-    
-
     // MARK: Actions
     // ---------------------
-    
     
     @IBAction func checkBalancePressed(_ sender: Any) {
         print("check balance button pressed!")
         
+        let fetchRequest:NSFetchRequest<Customers> = Customers.fetchRequest()
+        
+        do {
+            let results = try fetchRequest.execute() as [Customers]
+            
+            print("Number of items in database: \(results.count)")
+            
+            for c in results {
+                print("Person Email: \(c.name)")
+                print("Person Password: \(c.balance)")
+            }
+        }
+        catch {
+            print("Error when fetching from database")
+        }
     }
     
     

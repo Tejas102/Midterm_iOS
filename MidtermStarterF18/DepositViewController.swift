@@ -1,62 +1,77 @@
 //
-//  DepositViewController.swift
-//  MidtermStarterF18
+//  ViewController.swift
+//  asdasds
 //
-//  Created by parrot on 2018-11-14.
-//  Copyright © 2018 room1. All rights reserved.
+//  Created by Tejas Jadhav on 2018-11-15.
+//  Copyright © 2018 Tejas Jadhav. All rights reserved.
 //
 
 import UIKit
 import CoreData
 
 class DepositViewController: UIViewController {
-
-    var context:NSManagedObjectContext!
+    
+    var person:Customer!;
     
     // MARK: Outlets
     // ---------------------
     @IBOutlet weak var customerIdTextBox: UITextField!
     @IBOutlet weak var balanceLabel: UILabel!
-
+    
     @IBOutlet weak var depositAmountTextBox: UITextField!
     @IBOutlet weak var messagesLabel: UILabel!
     
-    @IBAction func backtocustbutton(_ sender: Any) {
-        performSegue(withIdentifier: "checktoadd", sender: self)
-    }
+    // MARK: CoreDta variables
+    // ------------------------------
+    var context:NSManagedObjectContext!
     
     // MARK: Default Functions
     // ---------------------
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         print("You are on the Check Balance screen!")
+        
+        // Setup your CoreData variable
+        // ----------------------------------------
+        
+        // 1. Mandatory - copy and paste this
+        // Explanation: try to create/initalize the appDelegate variable.
+        // If creation fails, then quit the app
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
+        // 2. Mandatory - initialize the context variable
+        // This variable gives you access to the CoreData functions
         self.context = appDelegate.persistentContainer.viewContext
-
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
     }
+    
+    
     // MARK: Actions
     // ---------------------
+    
     
     @IBAction func checkBalancePressed(_ sender: Any) {
         print("check balance button pressed!")
         
-        let fetchRequest:NSFetchRequest<Customers> = Customers.fetchRequest()
+        let fetchRequest:NSFetchRequest<Customer> = Customer.fetchRequest()
+        
+        //WHERE
+        fetchRequest.predicate = NSPredicate(format: "customerId == %@", customerIdTextBox.text!);
+        
         
         do {
-            let results = try fetchRequest.execute() as [Customers]
+            let results = try self.context.fetch(fetchRequest) as [Customer]
             
+            // Loop through the database results and output each "row" to the screen
             print("Number of items in database: \(results.count)")
             
-            for c in results {
-                print("Person Email: \(c.name)")
-                print("Person Password: \(c.balance)")
+            if results.count == 1 {
+                balanceLabel.text = "$\(results[0].balance)";
             }
         }
         catch {
@@ -67,35 +82,56 @@ class DepositViewController: UIViewController {
     
     @IBAction func depositButtonPressed(_ sender: Any) {
         print("you pressed the deposit button!")
-    }
-    
-    
-    @IBAction func showCustomersPressed(_ sender: Any) {
-        print("Show all users pressed!")
+        let fetchRequest:NSFetchRequest<Customer> = Customer.fetchRequest()
         
-        // This is the same as:  SELECT * FROM User
+        //WHERE
+        fetchRequest.predicate = NSPredicate(format: "customerId == %@", customerIdTextBox.text!);
         
-        //SELECT * FROM User
-        let fetchRequest:NSFetchRequest<Customers> = Customers.fetchRequest()
-        
-        //WHERE email="jenelle@gmail.com"
-        //fetchRequest.predicate =  NSPredicate(format: "email == %@", "jenelle@gmail.com")
-        
-        // SQL: SELECT * FROM User WHERE email="jeenlle@gmil.com"
         
         do {
-            // Send the "SELECT *" to the database
-            //  results = variable that stores any "rows" that come back from the db
-            // Note: The database will send back an array of User objects
-            // (this is why I explicilty cast results as [User]
-            let results = try self.context.fetch(fetchRequest) as [Customers]
+            let results = try self.context.fetch(fetchRequest) as [Customer]
             
             // Loop through the database results and output each "row" to the screen
             print("Number of items in database: \(results.count)")
             
+            if results.count == 1 {
+                balanceLabel.text = "$\(results[0].balance)";
+                person = results[0];
+                person.balance = results[0].balance + Double(depositAmountTextBox.text!)!;
+                balanceLabel.text = "$\(person.balance)";
+                messagesLabel.text = "Deposit sucess";
+                do {
+                    print("saved to database")
+                    try self.context.save()
+                }
+                catch {
+                    print("Error while saving to database")
+                }
+            }
+        }
+        catch {
+            print("Error when fetching from database")
+        }
+        
+    }
+    
+    
+    @IBAction func showCustomersPressed(_ sender: Any) {
+        print("Show customers button pressed!")
+        
+        let fetchRequest:NSFetchRequest<Customer> = Customer.fetchRequest()
+        
+        do {
+            
+            let results = try self.context.fetch(fetchRequest) as [Customer]
+            
+            print("Number of items in database: \(results.count)")
+            
             for x in results {
-                print("User Email: \(x.name)")
-                print("User Password: \(x.balance)")
+                print("Name: \(x.name!)")
+                print("Customer ID: \(x.customerid!)")
+                print("Balance: $\(x.balance)")
+                print("--------------")
             }
         }
         catch {
@@ -105,13 +141,13 @@ class DepositViewController: UIViewController {
     
     
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }

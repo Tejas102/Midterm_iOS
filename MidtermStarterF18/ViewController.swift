@@ -1,29 +1,25 @@
 //
 //  ViewController.swift
-//  MidtermStarterF18
+//  asdasds
 //
-//  Created by parrot on 2018-11-14.
-//  Copyright © 2018 room1. All rights reserved.
+//  Created by Tejas Jadhav on 2018-11-15.
+//  Copyright © 2018 Tejas Jadhav. All rights reserved.
 //
 
 import UIKit
 
 class ViewController: UIViewController {
     
-    @IBAction func loginbutton(_ sender: Any) {
-        performSegue(withIdentifier: "s1to2", sender: self)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
+    
+    
 }
 
